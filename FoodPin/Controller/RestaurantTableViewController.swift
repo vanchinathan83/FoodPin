@@ -33,11 +33,6 @@ class RestaurantTableViewController: UITableViewController {
             Restaurant(name: "CASK Pub and Kitchen", type: "Thai", location: "London", image: "cask", isFavorite: false)
     ]
     
-    
-    enum Section {
-        case all
-    }
-    
     lazy var dataSource = configureDataSource()
     
     // MARK: - UITableViewDelegate didSelectRowAt
@@ -90,9 +85,9 @@ class RestaurantTableViewController: UITableViewController {
     }
     
     // MARK: - UITableViewDiffableDataSource
-    func configureDataSource() -> UITableViewDiffableDataSource<Section, Restaurant> {
+    func configureDataSource() -> RestaurantDiffableDataSource {
         let cellIdentifier = "favoritecell"
-        let dataSource = UITableViewDiffableDataSource<Section, Restaurant>(
+        let dataSource = RestaurantDiffableDataSource(
         tableView: tableView, cellProvider: {tableView, indexPath, restaurant in
             let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as! RestaurantTableViewCell
             cell.nameLabel?.text = restaurant.name
