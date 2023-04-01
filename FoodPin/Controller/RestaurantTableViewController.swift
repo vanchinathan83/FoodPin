@@ -35,13 +35,49 @@ class RestaurantTableViewController: UITableViewController {
     
     lazy var dataSource = configureDataSource()
     
+
+    override func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath:IndexPath) -> UISwipeActionsConfiguration? {
+        guard let restaurant = self.dataSource.itemIdentifier(for: indexPath) else {
+            return UISwipeActionsConfiguration()
+        }
+        
+        let deleteAction = UIContextualAction(style: .destructive, title:"Delete") {
+            (action, sourceView, completionHandler) in
+            var snapshot = self.dataSource.snapshot()
+            snapshot.deleteItems([restaurant])
+            self.dataSource.apply(snapshot, animatingDifferences: true)
+            completionHandler(true)
+        }
+        
+        let shareAction = UIContextualAction(style: .normal, title: "Share") { (action, sourceView, completionHandler) in
+            let defaultText = "Just Checking in at " + restaurant.name
+            let activityController: UIActivityViewController
+            
+            if let imageToShare =  UIImage(named: restaurant.image) {
+                activityController = UIActivityViewController(activityItems: [defaultText, imageToShare], applicationActivities: nil)
+            } else {
+                activityController = UIActivityViewController(activityItems: [defaultText], applicationActivities: nil)
+            }
+            if let popoverController = activityController.popoverPresentationController {
+                if let cell = tableView.cellForRow(at: indexPath){
+                    popoverController.sourceView = cell
+                    popoverController.sourceRect = cell.frame
+                }
+            }
+            self.present(activityController, animated: true, completion: nil)
+            completionHandler(true)
+        }
+        
+        let swipeConfiguration = UISwipeActionsConfiguration(actions: [deleteAction, shareAction])
+        return swipeConfiguration
+    }
     // MARK: - UITableViewDelegate didSelectRowAt
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath){
         let optionMenu = UIAlertController(title: nil, message: "What do you want to do?", preferredStyle: .actionSheet)
         if let popoverController = optionMenu.popoverPresentationController {
             if let cell = tableView.cellForRow(at: indexPath){
                 popoverController.sourceView = cell
-                popoverController.sourceRect = cell.bounds
+                popoverController.sourceRect = cell.frame
             }
         }
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
