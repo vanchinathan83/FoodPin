@@ -138,6 +138,8 @@ class RestaurantTableViewController: UITableViewController {
     // MARK: - ViewController Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        navigationController?.navigationBar.prefersLargeTitles = true
 
         tableView.cellLayoutMarginsFollowReadableWidth = true
         tableView.dataSource = dataSource
