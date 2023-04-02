@@ -35,7 +35,30 @@ class RestaurantTableViewController: UITableViewController {
     
     lazy var dataSource = configureDataSource()
     
-
+    // MARK: - UITableViewDelegate leadingSwipeActionConfigurationForRowAt
+    override func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        
+        if self.dataSource.itemIdentifier(for: indexPath) == nil {
+            return UISwipeActionsConfiguration()
+        }
+        
+        let favoriteAction = UIContextualAction(style: .normal, title: ""){(action, sourceView, completionHandler) in
+            let cell = tableView.cellForRow(at: indexPath) as! RestaurantTableViewCell
+            self.restaurants[indexPath.row].isFavorite = !self.restaurants[indexPath.row].isFavorite
+            cell.heart.isHidden = !self.restaurants[indexPath.row].isFavorite
+            completionHandler(true)
+        }
+        
+        favoriteAction.backgroundColor = UIColor.systemPink
+        favoriteAction.image = UIImage(systemName:"heart.fill")
+        
+        let swipeConfiguration = UISwipeActionsConfiguration(actions: [favoriteAction])
+        
+        
+        return swipeConfiguration
+    }
+    
+    // MARK: - UITableViewDelegate trailingSwipeActionConfigurationForRowAt
     override func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath:IndexPath) -> UISwipeActionsConfiguration? {
         guard let restaurant = self.dataSource.itemIdentifier(for: indexPath) else {
             return UISwipeActionsConfiguration()
@@ -48,6 +71,8 @@ class RestaurantTableViewController: UITableViewController {
             self.dataSource.apply(snapshot, animatingDifferences: true)
             completionHandler(true)
         }
+        
+        deleteAction.image = UIImage(systemName: "trash")
         
         let shareAction = UIContextualAction(style: .normal, title: "Share") { (action, sourceView, completionHandler) in
             let defaultText = "Just Checking in at " + restaurant.name
@@ -67,6 +92,9 @@ class RestaurantTableViewController: UITableViewController {
             self.present(activityController, animated: true, completion: nil)
             completionHandler(true)
         }
+        
+        shareAction.backgroundColor = UIColor.systemOrange
+        shareAction.image = UIImage(systemName: "square.and.arrow.up")
         
         let swipeConfiguration = UISwipeActionsConfiguration(actions: [deleteAction, shareAction])
         return swipeConfiguration
@@ -95,9 +123,9 @@ class RestaurantTableViewController: UITableViewController {
         })
         let favoriteAction = UIAlertAction(title: "Mark Favorite", style: .default, handler: {
             (action: UIAlertAction!) -> Void in
-            let cell = tableView.cellForRow(at: indexPath)
-            self.restaurants[indexPath.row].isFavorite = true
-            cell?.accessoryType = .checkmark
+            let cell = tableView.cellForRow(at: indexPath) as! RestaurantTableViewCell
+            self.restaurants[indexPath.row].isFavorite = !self.restaurants[indexPath.row].isFavorite
+            cell.heart.isHidden = !self.restaurants[indexPath.row].isFavorite
         })
         
         optionMenu.addAction(favoriteAction)
@@ -122,7 +150,7 @@ class RestaurantTableViewController: UITableViewController {
     
     // MARK: - UITableViewDiffableDataSource
     func configureDataSource() -> RestaurantDiffableDataSource {
-        let cellIdentifier = "favoritecell"
+        let cellIdentifier = "datacell"
         let dataSource = RestaurantDiffableDataSource(
         tableView: tableView, cellProvider: {tableView, indexPath, restaurant in
             let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as! RestaurantTableViewCell
@@ -130,7 +158,7 @@ class RestaurantTableViewController: UITableViewController {
             cell.thumbnailViewImage?.image = UIImage(named: self.restaurants[indexPath.row].image)
             cell.locationLabel?.text = self.restaurants[indexPath.row].location
             cell.typeLabel?.text = self.restaurants[indexPath.row].type
-            cell.accessoryType = self.restaurants[indexPath.row].isFavorite ? .checkmark : .none
+            cell.heart.isHidden =  self.restaurants[indexPath.row].isFavorite ? false : true
             return cell
         })
         
