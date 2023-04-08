@@ -16,6 +16,7 @@
 		72DE087529CE0230000625A8 /* RestaurantTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72DE087429CE0230000625A8 /* RestaurantTableViewCell.swift */; };
 		72DE08BB29D3ECC5000625A8 /* Restaurant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72DE08BA29D3ECC5000625A8 /* Restaurant.swift */; };
 		72DE08C029D53A40000625A8 /* RestaurantDiffableDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72DE08BF29D53A40000625A8 /* RestaurantDiffableDataSource.swift */; };
+		72DE08C229D9CECA000625A8 /* RestaurantDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72DE08C129D9CECA000625A8 /* RestaurantDetailViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +31,7 @@
 		72DE087429CE0230000625A8 /* RestaurantTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestaurantTableViewCell.swift; sourceTree = "<group>"; };
 		72DE08BA29D3ECC5000625A8 /* Restaurant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Restaurant.swift; sourceTree = "<group>"; };
 		72DE08BF29D53A40000625A8 /* RestaurantDiffableDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestaurantDiffableDataSource.swift; sourceTree = "<group>"; };
+		72DE08C129D9CECA000625A8 /* RestaurantDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestaurantDetailViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,6 +81,7 @@
 			isa = PBXGroup;
 			children = (
 				72DE087229CD5B51000625A8 /* RestaurantTableViewController.swift */,
+				72DE08C129D9CECA000625A8 /* RestaurantDetailViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -176,6 +179,7 @@
 				72DE085D29CD582B000625A8 /* AppDelegate.swift in Sources */,
 				72DE085F29CD582B000625A8 /* SceneDelegate.swift in Sources */,
 				72DE08C029D53A40000625A8 /* RestaurantDiffableDataSource.swift in Sources */,
+				72DE08C229D9CECA000625A8 /* RestaurantDetailViewController.swift in Sources */,
 				72DE087329CD5B51000625A8 /* RestaurantTableViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

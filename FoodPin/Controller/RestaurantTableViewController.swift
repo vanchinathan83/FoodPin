@@ -35,6 +35,16 @@ class RestaurantTableViewController: UITableViewController {
     
     lazy var dataSource = configureDataSource()
     
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "showRestaurantDetail" {
+            if let indexPath = tableView.indexPathForSelectedRow {
+                let destinationController  = segue.destination as! RestaurantDetailViewController
+                destinationController.restaurantImageName = self.restaurants[indexPath.row].image
+            }
+        }
+    }
+    
     // MARK: - UITableViewDelegate leadingSwipeActionConfigurationForRowAt
     override func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         
@@ -100,40 +110,41 @@ class RestaurantTableViewController: UITableViewController {
         return swipeConfiguration
     }
     // MARK: - UITableViewDelegate didSelectRowAt
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath){
-        let optionMenu = UIAlertController(title: nil, message: "What do you want to do?", preferredStyle: .actionSheet)
-        if let popoverController = optionMenu.popoverPresentationController {
-            if let cell = tableView.cellForRow(at: indexPath){
-                popoverController.sourceView = cell
-                popoverController.sourceRect = cell.frame
-            }
-        }
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-        let reserveAction = UIAlertAction(title: "Reserve", style: .default, handler: { (action: UIAlertAction!) -> Void in
-            let alertMessage = UIAlertController(title: nil, message: "Sorry! Feature not available!", preferredStyle: .actionSheet)
-            if let alertPopoverController = alertMessage.popoverPresentationController {
-                if let cell = tableView.cellForRow(at: indexPath) {
-                    alertPopoverController.sourceView = cell
-                    alertPopoverController.sourceRect = cell.bounds
-                }
-            }
-            let cancelAction = UIAlertAction(title: "Cancel", style: .default)
-            alertMessage.addAction(cancelAction)
-            self.present(alertMessage, animated: true)
-        })
-        let favoriteAction = UIAlertAction(title: "Mark Favorite", style: .default, handler: {
-            (action: UIAlertAction!) -> Void in
-            let cell = tableView.cellForRow(at: indexPath) as! RestaurantTableViewCell
-            self.restaurants[indexPath.row].isFavorite = !self.restaurants[indexPath.row].isFavorite
-            cell.heart.isHidden = !self.restaurants[indexPath.row].isFavorite
-        })
-        
-        optionMenu.addAction(favoriteAction)
-        optionMenu.addAction(reserveAction)
-        optionMenu.addAction(cancelAction)
-        present(optionMenu, animated: true, completion: nil)
-        tableView.deselectRow(at: indexPath, animated: false)
-    }
+    // commenting the code as we will add this feature in the detail view controller.
+//    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath){
+//        let optionMenu = UIAlertController(title: nil, message: "What do you want to do?", preferredStyle: .actionSheet)
+//        if let popoverController = optionMenu.popoverPresentationController {
+//            if let cell = tableView.cellForRow(at: indexPath){
+//                popoverController.sourceView = cell
+//                popoverController.sourceRect = cell.frame
+//            }
+//        }
+//        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+//        let reserveAction = UIAlertAction(title: "Reserve", style: .default, handler: { (action: UIAlertAction!) -> Void in
+//            let alertMessage = UIAlertController(title: nil, message: "Sorry! Feature not available!", preferredStyle: .actionSheet)
+//            if let alertPopoverController = alertMessage.popoverPresentationController {
+//                if let cell = tableView.cellForRow(at: indexPath) {
+//                    alertPopoverController.sourceView = cell
+//                    alertPopoverController.sourceRect = cell.bounds
+//                }
+//            }
+//            let cancelAction = UIAlertAction(title: "Cancel", style: .default)
+//            alertMessage.addAction(cancelAction)
+//            self.present(alertMessage, animated: true)
+//        })
+//        let favoriteAction = UIAlertAction(title: "Mark Favorite", style: .default, handler: {
+//            (action: UIAlertAction!) -> Void in
+//            let cell = tableView.cellForRow(at: indexPath) as! RestaurantTableViewCell
+//            self.restaurants[indexPath.row].isFavorite = !self.restaurants[indexPath.row].isFavorite
+//            cell.heart.isHidden = !self.restaurants[indexPath.row].isFavorite
+//        })
+//
+//        optionMenu.addAction(favoriteAction)
+//        optionMenu.addAction(reserveAction)
+//        optionMenu.addAction(cancelAction)
+//        present(optionMenu, animated: true, completion: nil)
+//        tableView.deselectRow(at: indexPath, animated: false)
+//    }
 
     // MARK: - ViewController Lifecycle
     override func viewDidLoad() {
@@ -152,7 +163,7 @@ class RestaurantTableViewController: UITableViewController {
     
     // MARK: - UITableViewDiffableDataSource
     func configureDataSource() -> RestaurantDiffableDataSource {
-        let cellIdentifier = "datacell"
+        let cellIdentifier = "favoritecell"
         let dataSource = RestaurantDiffableDataSource(
         tableView: tableView, cellProvider: {tableView, indexPath, restaurant in
             let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as! RestaurantTableViewCell
